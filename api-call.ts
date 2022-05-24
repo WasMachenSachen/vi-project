@@ -4,7 +4,7 @@ import { writeJsonSync } from "https://deno.land/x/jsonfile/mod.ts";
 console.log(Deno.env.get("API_KEY"));
 
 const API_URL = "https://search.dip.bundestag.de/api/v1/aktivitaet";
-const maxRequests = 100;
+const maxRequests = 2000;
 let responseArray: object[] = [];
 
 let cursor;
@@ -13,21 +13,23 @@ for (let i = 0; i < maxRequests; i++) {
   if (cursor) {
     tempUrl = `${API_URL}?apikey=${Deno.env.get("API_KEY")}&cursor=${cursor}`;
   }
-
   const response = await fetch(tempUrl);
   const jsonData = await response.json();
+  // if(!cursor){console.log(response);console.log(jsonData);}
+
   console.log("durchgang:" + i);
   console.log({cursor});
-  console.log(typeof jsonData.documents);
+  // console.log(typeof jsonData.documents);
   jsonData.documents?.forEach((el: any) => {
-    if (el.vorgangsbezug[0].vorgangsposition.includes("Ordnungsruf")) {
+    if (el.vorgangsbezug && el.vorgangsbezug[0].vorgangsposition.includes("Ordnungsruf")) {
       // console.log(el);
       responseArray.push(el);
     }
   });
-  cursor = jsonData.cursor;
+  cursor = encodeURIComponent(jsonData.cursor);
+  if(!cursor){break;}
 }
-console.log(responseArray.length);
+console.log("Gefundende Ordnungsrufe: " + responseArray.length);
 
 const pathAndFileName = `./${Date.now()}.json`;
 writeJsonSync(pathAndFileName, responseArray);
