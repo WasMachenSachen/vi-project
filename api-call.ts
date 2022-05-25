@@ -18,7 +18,7 @@ for (let i = 0; i < MAX_REQUESTS; i++) {
 
   // deno-lint-ignore no-explicit-any
   jsonData.documents?.forEach((el: any) => {
-    if (el.vorgangsbezug && el.vorgangsbezug[0].vorgangsposition.includes("Ordnungsruf")) {
+    if (el?.vorgangsbezug.length > 0 && el.vorgangsbezug[0]?.vorgangsposition.includes("Ordnungsruf")) {
       responseArray.push(el);
     }
   });
@@ -27,5 +27,6 @@ for (let i = 0; i < MAX_REQUESTS; i++) {
 }
 console.log("Gefundende Ordnungsrufe: " + responseArray.length);
 
-const pathAndFileName = `./${Date.now()}.json`;
+await Deno.mkdir("output", { recursive: true });
+const pathAndFileName = `./output/${Date.now()}.json`;
 writeJsonSync(pathAndFileName, responseArray);
