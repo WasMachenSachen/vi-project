@@ -5,14 +5,18 @@ import { wait } from './helper.ts'
 const API_URL = Deno.env.get("API_URL");
 const API_KEY = Deno.env.get("API_KEY");
 const MAX_REQUESTS = parseInt(Deno.env.get("MAX_REQUESTS") || '0', 10);
+const TIMEOUT_IN_SECONDS = parseInt(Deno.env.get("TIMEOUT_IN_SECONDS") || '0', 10);
 
 const responseArray: Record<string, unknown>[] = [];
+const cursors: Array<string> = [];
+
 let cursor;
+
+if(Deno.env.get("START_AT_CURSOR")) cursor = Deno.env.get("START_AT_CURSOR");
 
 for (let i = 0; i < MAX_REQUESTS; i++) {
   console.log("durchgang:" + i);
   console.log({cursor});
-
   const tempUrl = `${API_URL}?apikey=${API_KEY}${ cursor ? `&cursor=${cursor}` : '' }`;
   const response = await fetch(tempUrl);
   const jsonData = await response.json();
@@ -25,13 +29,19 @@ for (let i = 0; i < MAX_REQUESTS; i++) {
     }
   });
 
+  if(cursor) cursors.push(cursor);
   if(!jsonData.cursor){break;}
   cursor = encodeURIComponent(jsonData.cursor);
-  await wait(10);
+  await wait(TIMEOUT_IN_SECONDS);
 }
 
 console.log("Gefundende Ordnungsrufe: " + responseArray.length);
 
 await Deno.mkdir("output", { recursive: true });
-const pathAndFileName = `./output/${Date.now()}.json`;
+const timeStamp = Date.now();
+
+const pathAndFileName = `./output/${timeStamp}-data.json`;
 writeJsonSync(pathAndFileName, responseArray);
+
+const pathAndFileNameCursors = `./output/${timeStamp}-cursors.json`;
+writeJsonSync(pathAndFileNameCursors, cursors);
