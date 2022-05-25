@@ -17,9 +17,10 @@ for (let i = 0; i < MAX_REQUESTS; i++) {
   console.log({cursor});
 
   // deno-lint-ignore no-explicit-any
-  jsonData.documents?.forEach((el: any) => {
-    if (el?.vorgangsbezug.length > 0 && el.vorgangsbezug[0]?.vorgangsposition.includes("Ordnungsruf")) {
-      responseArray.push(el);
+  jsonData?.documents?.forEach((document: any) => {
+    const isDocumentRelevant = document?.vorgangsbezug.length > 0 && document.vorgangsbezug[0]?.vorgangsposition.includes("Ordnungsruf");
+    if (isDocumentRelevant) {
+      responseArray.push(document);
     }
   });
   cursor = encodeURIComponent(jsonData.cursor);
