@@ -26,7 +26,7 @@ for (let i = 0; i < MAX_REQUESTS; i++) {
     
     // deno-lint-ignore no-explicit-any
     jsonData?.documents?.forEach((document: any) => {
-      const isDocumentRelevant = document?.vorgangsbezug.length > 0 && document.vorgangsbezug[0]?.vorgangsposition.includes("Ordnungsruf");
+      const isDocumentRelevant = document?.vorgangsbezug?.length > 0 && document.vorgangsbezug[0]?.vorgangsposition.includes("Ordnungsruf");
       if (isDocumentRelevant) {
         responseArray.push(document);
       }
