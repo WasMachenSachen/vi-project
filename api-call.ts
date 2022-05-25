@@ -9,10 +9,7 @@ const responseArray: Record<string, unknown>[] = [];
 
 let cursor;
 for (let i = 0; i < maxRequests; i++) {
-  let tempUrl = `${API_URL}?apikey=${Deno.env.get("API_KEY")}`;
-  if (cursor) {
-    tempUrl = `${API_URL}?apikey=${Deno.env.get("API_KEY")}&cursor=${cursor}`;
-  }
+  const tempUrl = `${API_URL}?apikey=${Deno.env.get("API_KEY")}${ cursor ? `&cursor=${cursor}` : '' }`;
   const response = await fetch(tempUrl);
   const jsonData = await response.json();
   // if(!cursor){console.log(response);console.log(jsonData);}
