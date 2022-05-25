@@ -1,1 +1,1 @@
-deno run --allow-env --allow-read --allow-net api-call.ts
+deno run --allow-env --allow-read --allow-write --allow-net api-call.ts
