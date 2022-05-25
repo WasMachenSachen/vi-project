@@ -12,15 +12,13 @@ for (let i = 0; i < MAX_REQUESTS; i++) {
   const tempUrl = `${API_URL}?apikey=${API_KEY}${ cursor ? `&cursor=${cursor}` : '' }`;
   const response = await fetch(tempUrl);
   const jsonData = await response.json();
-  // if(!cursor){console.log(response);console.log(jsonData);}
 
   console.log("durchgang:" + i);
   console.log({cursor});
-  // console.log(typeof jsonData.documents);
+
   // deno-lint-ignore no-explicit-any
   jsonData.documents?.forEach((el: any) => {
     if (el.vorgangsbezug && el.vorgangsbezug[0].vorgangsposition.includes("Ordnungsruf")) {
-      // console.log(el);
       responseArray.push(el);
     }
   });
