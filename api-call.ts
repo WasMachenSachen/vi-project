@@ -8,7 +8,7 @@ const MAX_REQUESTS = parseInt(Deno.env.get("MAX_REQUESTS") || '0', 10);
 const TIMEOUT_IN_SECONDS = parseInt(Deno.env.get("TIMEOUT_IN_SECONDS") || '0', 10);
 
 const responseArray: Record<string, unknown>[] = [];
-const cursors: Array<string> = [];
+const cursors: Array<Record<string, number | string>> = [];
 
 let cursor;
 
@@ -29,7 +29,7 @@ for (let i = 0; i < MAX_REQUESTS; i++) {
     }
   });
 
-  if(cursor) cursors.push(cursor);
+  if(cursor) cursors.push({i, cursor});
   if(!jsonData.cursor){break;}
   cursor = encodeURIComponent(jsonData.cursor);
   await wait(TIMEOUT_IN_SECONDS);
