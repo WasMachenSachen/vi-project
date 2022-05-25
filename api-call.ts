@@ -1,15 +1,15 @@
 import "https://deno.land/x/dotenv/load.ts";
 import { writeJsonSync } from "https://deno.land/x/jsonfile/mod.ts";
 
-console.log(Deno.env.get("API_KEY"));
+const API_URL = Deno.env.get("API_URL");
+const API_KEY = Deno.env.get("API_KEY");
+const MAX_REQUESTS = parseInt(Deno.env.get("MAX_REQUESTS") || '0', 10);
 
-const API_URL = "https://search.dip.bundestag.de/api/v1/aktivitaet";
-const maxRequests = 2000;
 const responseArray: Record<string, unknown>[] = [];
-
 let cursor;
-for (let i = 0; i < maxRequests; i++) {
-  const tempUrl = `${API_URL}?apikey=${Deno.env.get("API_KEY")}${ cursor ? `&cursor=${cursor}` : '' }`;
+
+for (let i = 0; i < MAX_REQUESTS; i++) {
+  const tempUrl = `${API_URL}?apikey=${API_KEY}${ cursor ? `&cursor=${cursor}` : '' }`;
   const response = await fetch(tempUrl);
   const jsonData = await response.json();
   // if(!cursor){console.log(response);console.log(jsonData);}
