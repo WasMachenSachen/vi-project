@@ -38,7 +38,7 @@ for (let i = 0; i < MAX_REQUESTS; i++) {
     await wait(TIMEOUT_IN_SECONDS);
   } catch(e) {
     console.error(e);
-    console.warn('Continue to quit gracefully.');
+    console.warn('Continue to end gracefully.');
     break;
   }
 }
