@@ -23,8 +23,9 @@ for (let i = 0; i < MAX_REQUESTS; i++) {
       responseArray.push(document);
     }
   });
+
+  if(!jsonData.cursor){break;}
   cursor = encodeURIComponent(jsonData.cursor);
-  if(!cursor){break;}
 }
 console.log("Gefundende Ordnungsrufe: " + responseArray.length);
 
