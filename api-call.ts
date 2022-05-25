@@ -5,7 +5,7 @@ console.log(Deno.env.get("API_KEY"));
 
 const API_URL = "https://search.dip.bundestag.de/api/v1/aktivitaet";
 const maxRequests = 2000;
-let responseArray: object[] = [];
+const responseArray: Record<string, unknown>[] = [];
 
 let cursor;
 for (let i = 0; i < maxRequests; i++) {
@@ -20,6 +20,7 @@ for (let i = 0; i < maxRequests; i++) {
   console.log("durchgang:" + i);
   console.log({cursor});
   // console.log(typeof jsonData.documents);
+  // deno-lint-ignore no-explicit-any
   jsonData.documents?.forEach((el: any) => {
     if (el.vorgangsbezug && el.vorgangsbezug[0].vorgangsposition.includes("Ordnungsruf")) {
       // console.log(el);
