@@ -4,7 +4,6 @@ import { wait } from './helper.ts'
 
 const API_URL = Deno.env.get("API_URL");
 const API_KEY = Deno.env.get("API_KEY");
-const END_CURSOR = Deno.env.get("END_CURSOR");
 const MAX_REQUESTS = parseInt(Deno.env.get("MAX_REQUESTS") || '0', 10);
 const TIMEOUT_IN_SECONDS = parseInt(Deno.env.get("TIMEOUT_IN_SECONDS") || '0', 10);
 
@@ -35,7 +34,7 @@ for (let i = 0; i < MAX_REQUESTS; i++) {
   
     if (cursor) cursors.push({i, cursor});
     if (!jsonData.cursor){break;}
-    if (jsonData.cursor === END_CURSOR){break;}
+    if (cursor === jsonData.cursor){break;}
     cursor = encodeURIComponent(jsonData.cursor);
     await wait(TIMEOUT_IN_SECONDS);
   } catch(e) {
