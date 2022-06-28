@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ordnungsruf Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="grid h-[40rem] grid-cols-4 w-full">
+        <div class="border border-gray-500 col-span-3 grid">
+          <!-- bar wrapper -->
+          <div id="d3-bar-wrapper"></div>
+          <!-- timeline wrapper -->
+          <div id="d3-timeline-wrapper"></div>
+        </div>
+        <div class="border border-gray-500"></div>
+      </div>
+    </div>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
