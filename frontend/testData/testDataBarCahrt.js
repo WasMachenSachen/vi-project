@@ -90,6 +90,25 @@ export const callsToOrder = [
   },
   {
     calledOut: {
+      name: "Yannic Brügger",
+      party: "PDF",
+    },
+    reason: "Sagte Hurensohn zum Präsidenten.",
+    speech: {
+      speaker: { name: "Jürgen vond er Lippe", party: "PDF" },
+      topic: "Mehr Eier für Schalke - Subvention in Hühnermastberieben",
+    },
+    date: "2022-02-03",
+    president: "Sören Hurensonn",
+    source: {
+      pdf: "https://dserver.bundestag.de/btp/20/20036.pdf#P.3479",
+      sectionFrom: "A",
+      sectionTo: "B",
+      linktToVideo: "https://youtu.be/fBipVpYj0Bk?t=123",
+    },
+  },
+  {
+    calledOut: {
       name: "Tim Loges",
       party: "AMD",
     },

@@ -47,24 +47,65 @@ svg
   .attr("transform", `translate(0, ${svgHeight})`)
   .call(d3.axisBottom(xAxis).tickSizeOuter(0))
   .call((g) => g.select(".domain").remove())
+  .call((g) => g.selectAll("line").remove())
   .selectAll("text")
   .style("font-size", "20px");
 
-currentParties.forEach((party) => {
-  svg
-    .append("g")
+const maxCount = d3.max(
+  Object.values(currentSelection).map((el) => {
+    return el.length;
+  })
+);
+
+currentParties.forEach((party, i) => {
+  const wrapper = svg.append("g");
+  const cliPathId = "bar-clipPath-" + i;
+  wrapper
+    .append("clipPath")
+    .attr("id", cliPathId)
+    .append("rect")
+    .attr("x", (d) => {
+      return xAxis(party);
+    })
+    .attr("y", 0)
+    .attr("rx", 5)
+    .attr("ry", 5)
+    .attr("width", xAxis.bandwidth())
+    .attr("height", svgHeight);
+
+  wrapper
     .selectAll("g")
     .data(currentSelection[party])
     .enter()
     .append("rect")
     .attr("x", (d) => {
-      console.log(d);
       return xAxis(d.calledOut.party);
     })
     .attr("y", (d, i) => {
-      console.log(i);
-      return (svgHeight / 2) * i;
+      return (svgHeight / maxCount) * i;
     })
     .attr("width", xAxis.bandwidth())
-    .attr("height", svgHeight / 2);
+    .attr("height", svgHeight / maxCount)
+    .attr("class", "bar-slice")
+    .attr("clip-path", `url(#${cliPathId})`);
+
+  wrapper
+    .selectAll("g")
+    .data(currentSelection[party])
+    .enter()
+    .append("line")
+    .attr("x1", (d) => {
+      return xAxis(d.calledOut.party);
+    })
+    .attr("x2", (d) => {
+      return xAxis.bandwidth() + xAxis(d.calledOut.party);
+    })
+    .attr("y1", (d, i) => {
+      return (svgHeight / maxCount) * (i + 1);
+    })
+    .attr("y2", (d, i) => {
+      return (svgHeight / maxCount) * (i + 1);
+    })
+    .attr("class", "bar-divider")
+    .attr("clip-path", `url(#${cliPathId})`);
 });
