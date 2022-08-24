@@ -9,7 +9,7 @@ const currentSelection = getCallsForPartiesInDateRange(
   currentParties,
   callsToOrder
 );
-console.log(currentSelection);
+
 /* svg setup */
 const margin = { top: 20, right: 10, bottom: 40, left: 10 };
 const svgWidth = 800 - margin.left - margin.right;
