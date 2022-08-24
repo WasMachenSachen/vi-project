@@ -1,5 +1,5 @@
-import * as d3 from "d3";
-import { callsToOrder, periods } from "../testData/testDataBarCahrt.js";
+import * as d3 from 'd3';
+import { callsToOrder, periods } from '../testData/testDataBarCahrt.js';
 
 function addLeadingZeros(input, amount) {
   return (input + Math.pow(10, amount)).toString().substring(1, amount + 1);
@@ -9,28 +9,25 @@ function getMonthsBetweenTwoDates(from, to) {
   const fromData = {
     year: from.getFullYear(),
     month: from.getMonth(),
-    label: `${from.getFullYear()}-${addLeadingZeros(from.getMonth())}`
   };
 
   const toData = {
     year: to.getFullYear(),
     month: to.getMonth(),
-    label: `${to.getFullYear()}-${addLeadingZeros(to.getMonth())}`
   };
 
-  console.log(fromData);
   const months = [];
 
   for(let year = fromData.year; year <= toData.year; year++) {
-    for(let month = fromData.month; month <= 12; month++) {
+    for(let month = fromData.month; month < 12; month++) {
       months.push({
         year: year,
         month: month,
-        label: `${year}-${to.month}`
+        label: `${year}-${addLeadingZeros(month + 1, 2)}`
       });
     }
   }
-  console.log(months);
+
   return months;
 }
 
@@ -43,12 +40,12 @@ const svgWidth = 800 - margin.left - margin.right;
 const svgHeight = 100 - margin.top - margin.bottom;
 
 let svg = d3
-  .select("#d3-timeline-wrapper")
-  .append("svg")
-  .attr("width", svgWidth + margin.left + margin.right)
-  .attr("height", svgHeight + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  .select('#d3-timeline-wrapper')
+  .append('svg')
+  .attr('width', svgWidth + margin.left + margin.right)
+  .attr('height', svgHeight + margin.top + margin.bottom)
+  .append('g')
+  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
   
 const leftHandle = svg
   .append('circle')
@@ -56,7 +53,7 @@ const leftHandle = svg
   .attr('cy', svgHeight)
   .attr('r', 10)
   .attr('stroke', 'black')
-  .attr('fill', 'red')
+  .attr('fill', '#333333')
   .attr('class', 'handle');
 
 const rightHandle = svg
@@ -65,7 +62,7 @@ const rightHandle = svg
   .attr('cy', svgHeight)
   .attr('r', 10)
   .attr('stroke', 'black')
-  .attr('fill', 'blue')
+  .attr('fill', '#333333')
   .attr('class', 'handle');
 
 const range = svg
@@ -74,40 +71,10 @@ const range = svg
   .attr('y', svgHeight/2)
   .attr('width', parseInt(rightHandle.attr('cx'), 10) - parseInt(leftHandle.attr('cx'), 10))
   .attr('height', svgHeight)
-  .attr('fill', 'red')
+  .attr('fill', '#333333')
   .attr('class', 'range');
 
 let mouseover_node = null;
-
-
-svg.selectAll('.range')
-.on("mouseover", (d) => {mouseover_node = d})
-.on("mouseout", (_d) => {mouseover_node = null})
-.call(
-  d3.drag()
-  .on("start", function () { return false; })
-  .on("drag", function (e) {})
-  .on("end",  (_sourceElement, _index, _svgItems) => {})
-);
-
-svg.selectAll('.handle')
-.on("mouseover", (d) => {mouseover_node = d})
-.on("mouseout", (_d) => {mouseover_node = null})
-.call(
-  d3.drag()
-  .on("start", function () {
-    return false;
-  })
-  .on("drag", function (e) {
-
-    if(e.x < 1 || e.x > svgWidth) return;
-    if(parseInt(leftHandle.attr('cx')) > parseInt(rightHandle.attr('cx') - 50)) return;
-    d3.select(this).attr('cx', e.x);
-    range.attr('x', leftHandle.attr('cx'));
-    range.attr('width', rightHandle.attr('cx') - leftHandle.attr('cx'));
-  })
-  .on("end",  (_sourceElement, _index, _svgItems) => {})
-);
 
 /*
  * Y Axis
@@ -118,10 +85,50 @@ const yAxis = d3.scaleLinear().domain([0, yMax]).range([svgHeight, 0]);
 /*
  * X Axis
  */
-const xDomain = [0, 12*4];
+const xDomain = [0, months.length];
 const xAxis = d3.scaleLinear().domain(xDomain).rangeRound([0, svgWidth]);
 
+const xInverseDomain = [0, svgWidth];
+const xInverseAxis = d3.scaleLinear().domain(xInverseDomain).rangeRound([0, months.length]);
+
+
+svg.selectAll('.range')
+.call(
+  d3.drag().on('drag', function (e) {
+
+  })
+);
+
+const tickSize = parseInt(svgWidth/months.length);
+console.log(tickSize)
+svg.selectAll('.handle')
+.call(
+  d3.drag()
+  .on('start', () => false)
+  .on('drag', function (e) {
+
+    if(e.x < 1 || e.x > svgWidth) return;
+
+    // TODO: Fix the getting stuck bug after handles are too close together
+    if(parseInt(leftHandle.attr('cx')) + 1 > rightHandle.attr('cx') - tickSize) return;
+    d3.select(this).attr('cx', xInverseAxis(e.x) * tickSize);
+    range.attr('x', leftHandle.attr('cx'));
+    range.attr('width', rightHandle.attr('cx') - leftHandle.attr('cx'));
+
+  })
+  .on('end',  (_sourceElement, _index, _svgItems) => {})
+);
+
+
 svg
-  .append("g")
-  .attr("transform", `translate(0, ${svgHeight})`)
-  .call(d3.axisBottom(xAxis).tickSizeOuter(0));
+  .append('g')
+  .attr('transform', `translate(0, ${svgHeight})`)
+  .call(d3.axisBottom(xAxis)
+    .tickValues(Object.keys(months))
+    .tickFormat(months[0].label)
+  )
+  .selectAll('text')  
+  .style('text-anchor', 'end')
+  .attr('dx', '-.1em')
+  .attr('dy', '.15em')
+  .attr('transform', 'rotate(-65)');
