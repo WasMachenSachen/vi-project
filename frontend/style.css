@@ -17,3 +17,9 @@
 .bar-divider:last-of-type{
   display: none;
 }
+
+#d3-timeline-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
