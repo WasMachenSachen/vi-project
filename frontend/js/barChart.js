@@ -30,6 +30,7 @@ const lengths = Object.keys(currentSelection).map(
   (key) => currentSelection[key].length
 );
 const yMax = d3.max(lengths);
+/* TODO: still needed? */
 const yAxis = d3.scaleLinear().domain([0, yMax]).range([svgHeight, 0]);
 
 /*
@@ -59,7 +60,8 @@ const maxCount = d3.max(
 
 currentParties.forEach((party, i) => {
   const wrapper = svg.append("g");
-  const cliPathId = "bar-clipPath-" + i;
+  const cliPathId = `bar-clipPath-${i}`;
+  /* clip path for rounding corners */
   wrapper
     .append("clipPath")
     .attr("id", cliPathId)
@@ -68,11 +70,12 @@ currentParties.forEach((party, i) => {
       return xAxis(party);
     })
     .attr("y", 0)
-    .attr("rx", 5)
-    .attr("ry", 5)
+    // .attr("rx", 5)
+    // .attr("ry", 5)
     .attr("width", xAxis.bandwidth())
     .attr("height", svgHeight);
 
+  /* one slice for each callOut */
   wrapper
     .selectAll("g")
     .data(currentSelection[party])
@@ -82,13 +85,48 @@ currentParties.forEach((party, i) => {
       return xAxis(d.calledOut.party);
     })
     .attr("y", (d, i) => {
-      return (svgHeight / maxCount) * i;
+      // debugger;
+      console.log(d);
+      const sliceHeight = svgHeight / maxCount;
+      return svgHeight - sliceHeight - sliceHeight * i;
     })
+    // .attr("rx", (d, i) => {
+    //   // console.log({ i });
+    //   // console.log(currentSelection[party].length);
+    //   // return i === currentSelection[party].length - 1 ? 5 : 0;
+    //   return 0;
+    // })
+    // .attr("ry", (d, i) => {
+    //   console.log({ i });
+    //   console.log(i === 0);
+    //   return i === 0 ? 5 : 0;
+    // })
     .attr("width", xAxis.bandwidth())
     .attr("height", svgHeight / maxCount)
     .attr("class", "bar-slice")
-    .attr("clip-path", `url(#${cliPathId})`);
+    .attr("clip-path", `url(#${cliPathId})`)
+    .on("mousemove", function (event, d) {
+      //Get this bar's x/y values, then augment for the tooltip
+      const xPosition =
+        parseFloat(d3.select(this).attr("x")) + xAxis.bandwidth();
+      const yPosition = parseFloat(d3.pointer(event, this)[1]);
+      console.log(d3.pointer(event, this)[1]);
+      //Update the tooltip position and value
+      d3.select("#tooltip")
+        .style("left", xPosition + "px")
+        .style("top", yPosition + "px")
+        .select("#value")
+        .text(d);
+      //Show the tooltip
+      d3.select("#tooltip").classed("hidden", false);
+    })
+    .on("mouseout", function () {
+      //Hide the tooltip
+      /* TODO: check if mouse is over tooltip - dont hide it */
+      d3.select("#tooltip").classed("hidden", true);
+    });
 
+  /* divider line (pure for the style) */
   wrapper
     .selectAll("g")
     .data(currentSelection[party])
