@@ -17,3 +17,7 @@ export function getCallsForPartiesInDateRange(
   });
   return result;
 }
+
+export function normalizeData() {
+  console.log("normalized!");
+}
