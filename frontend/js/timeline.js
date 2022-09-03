@@ -2,6 +2,8 @@ import * as d3 from 'd3';
 
 export class CTOERangeSlider {
   constructor(width, height, margin, data, months) {
+
+    this.data = this.prepareDataInMonthBatches(data, months);
     this.height = height + margin.top + margin.bottom;
     this.width = width + margin.left + margin.right;
     this.months = months;
@@ -10,14 +12,39 @@ export class CTOERangeSlider {
     this.yMax = 100;
     this.yAxis = d3.scaleLinear().domain([0, this.yMax]).range([height, 0]);
     this.xDomain = [0, months.length];
-    this.xAxis = d3.scaleLinear().domain(width).rangeRound([0, width]);
+    this.xAxis = d3.scaleOrdinal().domain(months.map((month) => month.label));
     this.xInverseDomain = [0, width];
     this.xInverseAxis = d3.scaleLinear().domain(this.xInverseDomain).rangeRound([0, months.length]);
 
     this.svg = this.createSVG();
+    this.addBars();
     this.addAxis();
     this.addHandles();
     this.addRangeMarker();
+  }
+
+  prepareDataInMonthBatches(data, months) {
+    const res = {};
+    months.forEach((month) => res[month.label] = 0);
+    data.forEach((call) => {
+      if(months.map((month) => month.label).indexOf(call.date.slice(0, 7)) > -1) {
+        res[call.date.slice(0, 7)] += 1;
+      }
+    });
+    return Object.values(res);
+  }
+
+  addBars() {
+    const width = parseInt(this.width/(this.data.length*2));
+    this.svg.selectAll('rect')
+    .data(this.data)
+    .enter()
+    .append('rect')
+    .attr('x', (d, i) => i * width * 2)
+    .attr('y', 0)
+    .attr('width', width)
+    .attr('height', (d, i) => d * 10)
+    .attr('fill', '#555555');
   }
 
   onValueChange(callback) {
@@ -53,22 +80,20 @@ export class CTOERangeSlider {
   addLeftHandle() {
     this.leftHandle = this.svg
       .append('circle')
-      .attr('cx', 0)
+      .attr('cx', this.width / 3)
       .attr('cy', this.height / 2)
       .attr('r', 15)
-      .attr('stroke', 'black')
-      .attr('fill', '#333333')
+      .attr('fill', '#ff7100')
       .attr('class', 'handle');
   }
   
   addRightHandle() {
     this.rightHandle = this.svg
       .append('circle')
-      .attr('cx', this.width)
+      .attr('cx', this.width / 3 * 2)
       .attr('cy', this.height / 2)
       .attr('r', 15)
-      .attr('stroke', 'black')
-      .attr('fill', '#333333')
+      .attr('fill', '#ff7100')
       .attr('class', 'handle');
   }
   
@@ -80,7 +105,7 @@ export class CTOERangeSlider {
       .attr('y', 0)
       .attr('width', parseInt(this.rightHandle.attr('cx'), 10) - parseInt(this.leftHandle.attr('cx'), 10))
       .attr('height', this.height)
-      .attr('fill', '#333333')
+      .attr('fill', '#ff710011')
       .attr('class', 'range');
     
     this.svg.selectAll('.range')
