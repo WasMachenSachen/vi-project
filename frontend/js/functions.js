@@ -18,6 +18,10 @@ export function getCallsForPartiesInDateRange(
   return result;
 }
 
+export function normalizeData() {
+  console.log("normalized!");
+}
+
 export function addLeadingZeros(input, amount) {
   return (input + Math.pow(10, amount)).toString().substring(1, amount + 1);
 }
