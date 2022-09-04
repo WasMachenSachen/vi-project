@@ -3,7 +3,7 @@ import "./js/barChart.js";
 
 import { getMonthsBetweenTwoDates, getCallsForPartiesInDateRange } from './js/functions.js';
 import { CTOERangeSlider } from './js/timeline.js';
-import { callsToOrder, sampleCallsToOrder, periods } from "/testData/testDataBarCahrt.js";
+import { callsToOrder, periods } from "/testData/testDataBarCahrt.js";
 
 /* TIMELINE */
 const thisMonth = new Date();
