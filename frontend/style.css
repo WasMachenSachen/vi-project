@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bar-slice{
+  fill: #D9D9D9;
+}
+.bar-divider{
+  stroke: #B8B8B8;
+  stroke-width: 2;
+}
+.bar-divider:last-of-type{
+  display: none;
+}
+
+#d3-timeline-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
