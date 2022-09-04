@@ -21,7 +21,6 @@ const timelineSettings = {
 const timeline = new CTOERangeSlider(timelineSettings.width, timelineSettings.height, margin, callsToOrder, months);
 
 timeline.onValueChange((selectedMonths) => {
-  const currentParties = [...new Set(periods[0].parties.map((el) => el.name))];
   console.log(
     getCallsForPartiesInDateRange(
       new Date(selectedMonths.from),
