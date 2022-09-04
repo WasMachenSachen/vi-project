@@ -10,7 +10,7 @@ files of your project). -->
 |----------------|----------------------------|----------------|
 | Yannic Brügger |                            |                |
 | Jan Koll       | jan.koll@smail.th-koeln.de | 11125790       |
-| Sven Linßen    |                            |                |
+| Sven Linßen    | sven.linssen@th-koeln.de   | 11089166       |
 | Tim Loges      |                            |                |
 
 **Projekt Link** https://github.com/WasMachenSachen/vi-project
@@ -59,13 +59,19 @@ Die verwendeten Daten stammen aus der vom Bundestag bereitgestellten [API](https
 
 Um alle Rufe zu erfassen, wurden mittels eines eigenen Programms alle Transkripte durchlaufen und nach passenden Textpassagen gesucht. Da diese nicht immer eindeutig als Ordnungsruf an eine bestimmte Person identifizierbar sind, musste zusätzlich eine Liste aller jemals Abgeordneten aus der API geholt werden, um diesen Rufe zuzuordnen. 
 
-> Bei diesem Verfahren kommt es mit hoher Wahrscheinlichkeiten zu Ungenauigkeiten, die nur mittels manueller Überprüfung behoben werden könnten. Aufgrund der großen Datenmenge (879 Treffer) wurde sich bewusst dazu entschieden dies für den MVP zu vernachlässigen und somit eine (hoffentlich) minimale Ungenauigkeit in Kauf zu nehmen.
+> Bei diesem Verfahren kommt es mit hoher Wahrscheinlichkeiten zu Ungenauigkeiten, die nur mittels manueller Überprüfung behoben werden könnten. Aufgrund der großen Datenmenge (879 Treffer) wurde sich bewusst dazu entschieden dies für den MVP zu vernachlässigen und somit eine (hoffentlich) minimale Ungenauigkeit in Kauf zu nehmen. Eine präzisere Alternative hätte ein Textmining-Algorithmus bieten können, dessen Implementierung jedoch im Rahmen des Projektes als zu aufwändig eingeschätzt wurde.
 
 
 ## Data Processing
 
 <!-- Do you expect to do substantial data cleanup? What quantities do you plan to
 derive from your data? How would data processing be implemented? -->
+
+Um die Textpassagen mit den Abgeordneten zu mappen, wurde mit einem Python Script nach dem Nachnamen der jeweiligen Abgeordneten die zum Zeitpunkt der Erstellung der Textpassage im Bundestag saßen gesucht. Falls ein Name in einer Textpassage vorhanden war, wurde die jeweilige Person als zur Ordnung gerufend eingetragen. Übrige Zeilen mit leeren Textpassagen wurden gelöscht.
+
+Zudem wurde in weiten Teilen mit Openrefine gearbeitet um den Datensatz zu strukturieren. Präsidenten wurden nach dem Datum der Erstellung der Textpassagen nachträglich eingetragen (Quelle: https://www.bundestag.de/parlament/geschichte/bundestagspraesidenten_seit_1949). Die Parteiangehörigkeit der zur Ordnung gerufenden war zu dem im selben Textfeld und wurde herausextrahiert in eine neue Spalte. Datumseinträge ließen sich zudem mit Openrefine normen.
+
+Die entstandene Excel-Datei wurde daraufhin mit einem weiteren Python-Skript in ein zuvor vereinbartes JSON-Format gebracht.
 
 
 ## Visualisation Design
