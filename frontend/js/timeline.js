@@ -22,6 +22,10 @@ export class CTOERangeSlider {
     this.addAxis();
     this.addHandles();
     this.addRangeMarker();
+
+    document.querySelector('h1').addEventListener('click', () => {
+      this.getSelectedMonths();
+    });
   }
 
   prepareDataInMonthBatches(data, months) {
@@ -41,39 +45,42 @@ export class CTOERangeSlider {
   }
 
   getSelectedMonths() {
-    const fromIndex = 0;
-    const toIndex = 0;
+    const fromIndex = this.xInverseAxis(parseInt(this.leftHandle.attr('cx')));
+    const toIndex = this.xInverseAxis(parseInt(this.rightHandle.attr('cx')));
+    return { from: this.months[fromIndex], to:this.months[toIndex] };
   }
 
   addBars() {
     const width = parseInt(this.widthWithMargins/(this.months.length));
     const context = this;
     this.svg.selectAll('rect')
-    .data(this.data)
-    .enter()
-    .append('rect')
-    .attr('x', (d, i) => i * (width + this.gap))
-    .attr('y', (d, i) => this.heightWithMargins - this.yScale(d))
-    .attr('rx', 2)
-    .attr('ry', 2)
-    .attr('width', width)
-    .attr('height', (d, i) => this.yScale(d))
-    .attr('fill', '#E0E0E0')
-    .append('title')
-    .text((d, i) => `${context.months[i]}: ${d}`);
+      .data(this.data)
+      .enter()
+      .append('rect')
+      .attr('x', (d, i) => i * (width + this.gap))
+      .attr('y', (d, i) => this.heightWithMargins - this.yScale(d))
+      .attr('rx', 2)
+      .attr('ry', 2)
+      .attr('width', width)
+      .attr('height', (d, i) => this.yScale(d))
+      .attr('fill', '#E0E0E0')
+      .append('title')
+      .text((d, i) => `${context.months[i]}: ${d}`);
 
     this.svg.selectAll('rect-highlighted')
-    .data(this.data)
-    .enter()
-    .append('rect')
-    .attr('clip-path', 'url(#clip-selected)')
-    .attr('x', (d, i) => i * (width + this.gap))
-    .attr('y', (d, i) => this.heightWithMargins - this.yScale(d))
-    .attr('rx', 2)
-    .attr('ry', 2)
-    .attr('width', width)
-    .attr('height', (d, i) => this.yScale(d))
-    .attr('fill', '#FE71016E');
+      .data(this.data)
+      .enter()
+      .append('rect')
+      .attr('clip-path', 'url(#clip-selected)')
+      .attr('x', (d, i) => i * (width + this.gap))
+      .attr('y', (d, i) => this.heightWithMargins - this.yScale(d))
+      .attr('rx', 2)
+      .attr('ry', 2)
+      .attr('width', width)
+      .attr('height', (d, i) => this.yScale(d))
+      .attr('fill', '#FE71016E')
+      .append('title')
+      .text((d, i) => `${context.months[i]}: ${d}`);
   }
 
   onValueChange(callback) {
@@ -81,7 +88,7 @@ export class CTOERangeSlider {
   }
 
   valuesChanged() {
-    const months = [];
+    const months = this.getSelectedMonths();
     this.valueChangeCallback(months);
   }
 
@@ -98,16 +105,16 @@ export class CTOERangeSlider {
       .attr('fill', '#E0E0E0');
 
     this.svg
-    .append('rect')
-    .attr('class', 'range')
-    .attr('clip-path', 'url(#clip-selected)')
-    .attr('x', 0)
-    .attr('y', this.heightWithMargins - this.tickSize / 2)
-    .attr('rx', 2)
-    .attr('ry', 2)
-    .attr('width', this.widthWithMargins)
-    .attr('height', this.tickSize)
-    .attr('fill', '#ff7100');
+      .append('rect')
+      .attr('class', 'range')
+      .attr('clip-path', 'url(#clip-selected)')
+      .attr('x', 0)
+      .attr('y', this.heightWithMargins - this.tickSize / 2)
+      .attr('rx', 2)
+      .attr('ry', 2)
+      .attr('width', this.widthWithMargins)
+      .attr('height', this.tickSize)
+      .attr('fill', '#ff7100');
 
     this.svg.selectAll('.range')
     .call(
@@ -116,6 +123,7 @@ export class CTOERangeSlider {
         context.range.attr('x', (context.xInverseAxis(e.x - halfRangeWidth)) * context.tickSize);
         context.leftHandle.attr('cx', context.range.attr('x'));
         context.rightHandle.attr('cx', parseInt(context.range.attr('x')) + parseInt(context.range.attr('width')));
+        context.valuesChanged();
       })
     );
   }
@@ -173,6 +181,7 @@ export class CTOERangeSlider {
         d3.select(this).attr('cx', context.xInverseAxis(e.x) * context.tickSize);
         context.range.attr('x', context.leftHandle.attr('cx'));
         context.range.attr('width', context.rightHandle.attr('cx') - context.leftHandle.attr('cx'));
+        context.valuesChanged();
       })
     );
   }

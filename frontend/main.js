@@ -1,7 +1,7 @@
 import "./style.css";
 import "./js/barChart.js";
 
-import { getMonthsBetweenTwoDates } from './js/functions.js';
+import { getMonthsBetweenTwoDates, getCallsForPartiesInDateRange } from './js/functions.js';
 import { CTOERangeSlider } from './js/timeline.js';
 import { callsToOrder, sampleCallsToOrder, periods } from "/testData/testDataBarCahrt.js";
 
@@ -15,10 +15,17 @@ const timelineSettings = {
   height: 100,
 }
 
-console.log(months);
-
 const timeline = new CTOERangeSlider(timelineSettings.width, timelineSettings.height, margin, callsToOrder, months);
 
 timeline.onValueChange((selectedMonths) => {
-  console.log(selectedMonths);
+  console.log(periods);
+  const currentParties = [...new Set(periods[0].parties.map((el) => el.name))];
+  console.log(
+    getCallsForPartiesInDateRange(
+      new Date(selectedMonths.from),
+      new Date(selectedMonths.to),
+      currentParties,
+      callsToOrder
+    )
+  );
 });
