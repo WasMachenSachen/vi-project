@@ -1,1 +1,1 @@
-deno run -A api-call-time_interval.ts
+deno run -A api-call-persons.ts

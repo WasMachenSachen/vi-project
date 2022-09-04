@@ -136,10 +136,10 @@ while (year <= TO) {
   console.log("Gefundende Ordnungsrufe: " + responseArray.length);
   hits += responseArray.length;
 
-  await Deno.mkdir("dummer-output", { recursive: true });
+  await Deno.mkdir("ordungsrufe", { recursive: true });
   const timeStamp = Date.now();
 
-  const pathAndFileName = `./dummer-output/${year}-${timeStamp}-data.json`;
+  const pathAndFileName = `./ordungsrufe/${year}-${timeStamp}-data.json`;
   writeJsonSync(pathAndFileName, responseArray);
 
 
