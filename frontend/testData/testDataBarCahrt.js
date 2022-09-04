@@ -1,4 +1,4 @@
-import ordnungsrufe_date_ordered from './ordnungsrufe_date_ordered.json';
+import ordnungsrufe_date_ordered from './ordnungsrufe_ordered_date_dieGRUENEN.json';
 
 export const callsToOrder = ordnungsrufe_date_ordered;
 
