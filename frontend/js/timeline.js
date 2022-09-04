@@ -22,10 +22,6 @@ export class CTOERangeSlider {
     this.addAxis();
     this.addHandles();
     this.addRangeMarker();
-
-    document.querySelector('h1').addEventListener('click', () => {
-      this.getSelectedMonths();
-    });
   }
 
   prepareDataInMonthBatches(data, months) {
