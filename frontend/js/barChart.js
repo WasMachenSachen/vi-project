@@ -101,10 +101,10 @@ export class CTOEChart {
           return context.xAxis.bandwidth() + context.xAxis(d.calledOut.party);
         })
         .attr("y1", (d, i) => {
-          return (context.height / maxCount) * (i + 1);
+          return context.height - (context.height / maxCount) * (i + 1);
         })
         .attr("y2", (d, i) => {
-          return (context.height / maxCount) * (i + 1);
+          return context.height - (context.height / maxCount) * (i + 1);
         })
         .attr("class", "bar-divider")
         .attr("clip-path", `url(#${cliPathId})`);
