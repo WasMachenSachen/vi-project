@@ -25,6 +25,8 @@ export class CTOEChart {
   }
 
   addBars() {
+    const context = this;
+
     const maxCount = d3.max(
       Object.values(this.data).map((el) => {
         return el.length;
@@ -32,7 +34,7 @@ export class CTOEChart {
     );
     
     this.parties.forEach((party, i) => {
-      const wrapper = this.svg.append("g");
+      const wrapper = context.svg.append("g");
       const cliPathId = `bar-clipPath-${i}`;
       /* clip path for rounding corners */
       wrapper
@@ -40,35 +42,35 @@ export class CTOEChart {
         .attr("id", cliPathId)
         .append("rect")
         .attr("x", (d) => {
-          return this.xAxis(party);
+          return context.xAxis(party);
         })
         .attr("y", 0)
         // .attr("rx", 5)
         // .attr("ry", 5)
-        .attr("width", this.xAxis.bandwidth())
-        .attr("height", this.height);
+        .attr("width", context.xAxis.bandwidth())
+        .attr("height", context.height);
     
       /* one slice for each callOut */
       wrapper
         .selectAll("g")
-        .data(this.data[party])
+        .data(context.data[party])
         .enter()
         .append("rect")
         .attr("x", (d) => {
-          return this.xAxis(d.calledOut.party);
+          return context.xAxis(d.calledOut.party);
         })
         .attr("y", (d, i) => {
-          const sliceHeight = this.height / maxCount;
-          return this.height - sliceHeight - sliceHeight * i;
+          const sliceHeight = context.height / maxCount;
+          return context.height - sliceHeight - sliceHeight * i;
         })
-        .attr("width", this.xAxis.bandwidth())
-        .attr("height", this.height / maxCount)
+        .attr("width", context.xAxis.bandwidth())
+        .attr("height", context.height / maxCount)
         .attr("class", "bar-slice")
         .attr("clip-path", `url(#${cliPathId})`)
         .on("mousemove", function (event, d) {
           /* tooltip position & content */
           const xPosition =
-            parseFloat(d3.select(this).attr("x")) + this.xAxis.bandwidth();
+            parseFloat(d3.select(this).attr("x")) + context.xAxis.bandwidth();
           const yPosition = parseFloat(d3.pointer(event, this)[1]);
           //Update the tooltip position and value
           d3.select("#tooltip")
@@ -89,20 +91,20 @@ export class CTOEChart {
       /* divider line (pure for the style) */
       wrapper
         .selectAll("g")
-        .data(this.data[party])
+        .data(context.data[party])
         .enter()
         .append("line")
         .attr("x1", (d) => {
-          return this.xAxis(d.calledOut.party);
+          return context.xAxis(d.calledOut.party);
         })
         .attr("x2", (d) => {
-          return this.xAxis.bandwidth() + this.xAxis(d.calledOut.party);
+          return context.xAxis.bandwidth() + context.xAxis(d.calledOut.party);
         })
         .attr("y1", (d, i) => {
-          return (this.height / maxCount) * (i + 1);
+          return (context.height / maxCount) * (i + 1);
         })
         .attr("y2", (d, i) => {
-          return (this.height / maxCount) * (i + 1);
+          return (context.height / maxCount) * (i + 1);
         })
         .attr("class", "bar-divider")
         .attr("clip-path", `url(#${cliPathId})`);
