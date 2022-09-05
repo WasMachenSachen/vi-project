@@ -39,12 +39,13 @@ const timelineSettings = {
 const timeline = new CTOERangeSlider(timelineSettings.width, timelineSettings.height, timelineMargin, callsToOrder, months);
 
 timeline.onValueChange((selectedMonths) => {
-  console.log(
+  chart.update(
     getCallsForPartiesInDateRange(
       new Date(selectedMonths.from),
       new Date(selectedMonths.to),
       allPossibleParties,
       callsToOrder
-    )
+    ),
+    allPossibleParties
   );
 });

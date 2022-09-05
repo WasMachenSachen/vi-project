@@ -12,6 +12,12 @@ export class CTOEChart {
     this.addBars();
   }
 
+  update(data, parties) {
+    this.data = data;
+    this.parties = parties;
+    this.addBars();
+  }
+
   createSVG(width, height, margin) {
     const svg = d3
     .select("#d3-bar-wrapper")
@@ -34,7 +40,7 @@ export class CTOEChart {
     );
     
     this.parties.forEach((party, i) => {
-      const wrapper = context.svg.append("g");
+      const wrapper = context.svg.append("g").attr('class', 'wrapper');
       const cliPathId = `bar-clipPath-${i}`;
       /* clip path for rounding corners */
       wrapper
@@ -109,6 +115,7 @@ export class CTOEChart {
         .attr("class", "bar-divider")
         .attr("clip-path", `url(#${cliPathId})`);
     
+      return;
       /* checkbox for party selection in sidebar */
       d3.select("#checkbox-wrapper")
         .append("div")
