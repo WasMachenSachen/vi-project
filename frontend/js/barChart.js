@@ -16,14 +16,14 @@ export class CTOEChart {
 
     this.svg = this.createSVG(this.width, this.height, margin);
     this.addFilterCheckboxes();
-    this.addBars();
+    this.drawBars();
     this.addAxis();
   }
 
   update(data, parties) {
     this.data = data;
     this.parties = parties;
-    this.addBars();
+    this.drawBars();
   }
 
   createSVG(width, height, margin) {
@@ -67,7 +67,7 @@ export class CTOEChart {
     /* TODO: select all partys eventlistener */
   }
 
-  addBars() {
+  drawBars() {
     const context = this;
 
     const maxCount = d3.max(
@@ -77,12 +77,14 @@ export class CTOEChart {
     );
 
     // BARCHART
-    const partyWrappers = this.svg
-      .selectAll('g')
-      .data(this.parties)
+    const partyBar = this.svg
+      .selectAll('g.partyBar')
+      .data(this.parties);
+
+    partyBar.exit().remove();
+    
+    const clipPaths = partyBar
       .enter()
-      
-    partyWrappers
       .append("clipPath")
       .attr("id", (d, i) => `bar-clipPath-${i}`)
       .append("rect")
@@ -91,11 +93,16 @@ export class CTOEChart {
       .attr("width", context.xAxis.bandwidth())
       .attr("height", context.height);
 
-    const barGroup = partyWrappers.append('g');
+    const bar = partyBar.enter().append('g').attr('class', 'partyBar');
 
-    barGroup.selectAll('rect')
-      .data((d, i) => context.data[d])
-      .enter()
+    const barSlice = bar.selectAll('rect')
+      .data((d, i) => context.data[d]);
+
+    console.log(barSlice);
+
+    barSlice.exit().remove();
+
+    barSlice.enter()
       .append('rect')
       .attr("x", (d) => {
         return context.xAxis(d.calledOut.party);
@@ -128,9 +135,11 @@ export class CTOEChart {
         d3.select("#tooltip").classed("hidden", true);
       });
     
-    barGroup.selectAll('line')
-      .data((d, i) => context.data[d])
-      .enter()
+    const seperatorLines = bar.selectAll('line')
+      .data((d, i) => context.data[d]);
+
+    seperatorLines.exit().remove();
+    seperatorLines.enter()
       .append('line')
       .attr("x1", (d) => {
         return context.xAxis(d.calledOut.party);
@@ -158,18 +167,4 @@ export class CTOEChart {
       .selectAll("text")
       .style("font-size", "20px");
   }
-  /*
-  * TODO: Still needed?
-  * Y Axis
-
-  const lengths = Object.keys(currentSelection).map(
-    (key) => currentSelection[key].length
-  );
-
-  const yMax = d3.max(lengths);
-  const yAxis = d3.scaleLinear().domain([0, yMax]).range([this.height, 0]);
-  */
 }
-
-
-
