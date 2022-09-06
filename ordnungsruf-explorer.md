@@ -124,3 +124,13 @@ Diese Liste beinhaltet alle Funktionen, die für gut befunden wurden aber keine 
 - [ ] Anzeigen der exakten Aussagen, für die ein Ordnungsruf erteilt wurde
 - [ ] Normalisieren des Datensatzes durch Darstellung der Anzahl der Sitze einer Partei
 - [ ] Vereinfachte Filteroptionen durch intelligentes ein- und ausblenden der relevanten Parteien
+
+## Fazit und Ausblick
+
+Das Projekt war sowohl in der Datenaufbereitung als auch in der Visualisierung komplizierter als zu anfangs angenommen.
+
+Zu Beginn wurde davon ausgegangen, dass ie API des Bundestags alle im Bundestag vorgetragenen Inhalte und Zwischenrufe erfasst und kategorisiert. Die Erfassung wird durch die Protokollant:innen im Bundestag sichergestellt und anschließend in die API übertragen. Die Kategorisierung der Inhalte aus den Protokollen und das Anreichern dieser mit Metadaten geschieht allerdings erst seit wenigen Jahren. Das Aufbereiten der Protokolle aus vergangenen Jahren wäre im Rahmen dieses Projekts zu aufwendig. Für alle zukünftigen Sitzungen (und Ordnungsrufe) stehen diese Metadaten aber voraussichtlich zu Verfügung und können dem Projekt eine neue Datengrundlage bieten.
+
+D3 bietet grundlegende Werkzeuge zur Visualisierung von Daten. Einfache Visualisierungen sind schnell gemacht und Beispiele dazu im Internet einfach zu finden. Werden Standardpfade verlassen z.B. um ein bestimmtes Design zu implementieren oder um Graphen anders als üblich darzustellen, kann die Implementierung für Anfänger recht herausfordern sein. In diesem Projekt wurde sich beusst *gegen* den Einsatz von fertigen D3-Komponenten wie einem Range-Slider entschieden, um die Funktionalität im Detail zu verstehen. Für zukünftige Auseinandersetzungen ist das Zusammenspiel zwischen D3 und JavaScript-Frameworks wie Alpine besonders interessant. Welche Komponente hat in so einer Konstellation die Hoheit über die Daten und die Benutzer-Events? Was gibt es für best practices? Wird vielleicht sogar generell vom Einsatz anderer JS-Frameworks neben D3 abgeraten?
+
+Insgesamt konnte in diesem Projekt viel in der Vorlesung erlerntes Wissen angwandt und neues Wissen gewonnen werden. Allgemein besteht im Projektteam das Interesse, das Projekt (Quelltext) nach Kursabschluss zu veröffentlichen und es gegebenenfalls weiterzuführen. Eine veröffentlichte Visualisierung der Ordnungsrufe gibt es zum aktuellen Zeitpunkt scheinabr nicht während der Trend um Ordnungsrufe durch YouTube-Kanäle wie [BestOfBundestag](https://www.youtube.com/c/BestofBundestag) weiter zunimmt.
