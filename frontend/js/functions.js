@@ -51,3 +51,11 @@ export function getMonthsBetweenTwoDates(from, to) {
 
   return months;
 }
+
+export function getAllPartiesFromDataset(dataset) {
+  const parties = [];
+  dataset.forEach(element => {
+    if(parties.indexOf(element.calledOut.party) < 0) parties.push(element.calledOut.party)
+  });
+  return parties;
+}
