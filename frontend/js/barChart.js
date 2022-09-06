@@ -145,12 +145,10 @@ export class CTOEChart {
         return context.height - (context.height / maxCount) * (i + 1);
       })
       .attr("class", "bar-divider");
-      
   }
 
   addAxis() {
     // const xDomain = [...new Set(periods[0].parties.map((el) => el.name))];
-
     this.svg
       .append("g")
       .attr("transform", `translate(0, ${this.height})`)
