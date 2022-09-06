@@ -102,22 +102,22 @@ Alle Sketches/Designs, die es in die finale Auswahl geschafft haben, sind [hier]
 ## Must-Have Features
 Die folgenden Punkte stellen die Grundfunktionalität der interaktiven Visualisierung dar. Diese werden bis zur Abgabe voraussichtlich fertiggestellt.
 
-- [✔] Visualisierung der Anzahl der Ordnungsrufe einer Partei
-- [✔] Details zu einzelnen Ordnungsrufen anzeigen
-- [✔] Filtern des Datensatzes auf einen Zeitraum
-- [✔] Filtern des Datensatzes nach Parteien
+- [x] Visualisierung der Anzahl der Ordnungsrufe einer Partei
+- [x] Details zu einzelnen Ordnungsrufen anzeigen
+- [x] Filtern des Datensatzes auf einen Zeitraum
+- [x] Filtern des Datensatzes nach Parteien
 
 
 ## Optionale Features und Ideensammlung
 Diese Liste beinhaltet alle Funktionen, die für gut befunden wurden aber keine Priorität erhalten haben. Sie dient außerdem als Ideensammlung, über die zu einem späteren Zeitpunkt erneut diskutiuert werden kann.
 
 ### Design
-- [✔] Bundestag Theme und generell ansprechendes UI Design
+- [x] Bundestag Theme und generell ansprechendes UI Design
 - [ ] Pateifarben und Fotos der Abgeordneten
 - [ ] Responsives Design
 
 ### Timeline
-- [✔] Visualisieren der Ordnungsrufanzahl direkt auf der Timeline
+- [x] Visualisieren der Ordnungsrufanzahl direkt auf der Timeline
 - [ ] Die Timeline selbst scrollbar machen (besonders für die Zukunft relevant)
 
 ### Datensatz und Verknüpfung zu anderen Datensätzen
