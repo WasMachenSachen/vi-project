@@ -34,7 +34,7 @@ Um einen besseren Überblick der Verteilung der Ordnungsrufe zu bekommen, ist di
 <!-- Anything that inspired you, such as a paper, a web site,
 visualisations we discussed in class, etc. -->
 
-Für den Deutschen Bundestag ist uns keine Anwendung mit ähnlicher Funktion bekannt. Neben den bereits erwähnten Veröffentlichen des Bundestags über die Ordnungsrufe pro Wahlperiode ([WP01-11](https://www.bundestag.de/resource/blob/273012/c5607fa52b61d592861c017ce0e70c55/Kapitel_23_Statistische_Gesamt__bersicht_1______11__Wahlperiode-pdf-data.pdf) [WP12-19](https://www.bundestag.de/resource/blob/196296/4b2ee134475f75e677cdf679caff93a8/Kapitel_07_16_Ordnungsma__nahmen-data.pdf)), bietet der Bundestag eine [API Schnittstelle](https://dip.bundestag.de/über-dip/hilfe/api) an. Mittels dieser API lassen sich zwar auch Ordnung rufe Filtern, diese sind allerdings unvollständig (kleiner 30 Treffer).
+Für den Deutschen Bundestag ist uns keine Anwendung mit ähnlicher Funktion bekannt. Es existiert eine [Visualisierung von Ordnungsrufen für den Bundestag in Österreich](http://parlamentinzahlen.blogspot.com/p/ordnungsrufe.html), jedoch ist diese veraltet und bildet nicht 1:1 die Informationen ab, die von den Zielen des Projektteams verfolgt wurden. Neben den bereits erwähnten Veröffentlichen des Bundestags über die Ordnungsrufe pro Wahlperiode ([WP01-11](https://www.bundestag.de/resource/blob/273012/c5607fa52b61d592861c017ce0e70c55/Kapitel_23_Statistische_Gesamt__bersicht_1______11__Wahlperiode-pdf-data.pdf) [WP12-19](https://www.bundestag.de/resource/blob/196296/4b2ee134475f75e677cdf679caff93a8/Kapitel_07_16_Ordnungsma__nahmen-data.pdf)), bietet der Bundestag eine [API Schnittstelle](https://dip.bundestag.de/über-dip/hilfe/api) an. Mittels dieser API lassen sich zwar auch Ordnung rufe Filtern, diese sind allerdings unvollständig (kleiner 30 Treffer).
 
 
 ## Project Objectives and Goals
@@ -42,14 +42,7 @@ Für den Deutschen Bundestag ist uns keine Anwendung mit ähnlicher Funktion bek
 <!-- Provide the primary questions you are trying to answer with your visualisation.
 What would you like to learn and accomplish? List the benefits. -->
 
-Erstellen einer interaktiven Visualisierung der Ordnungsrufe im deutschen Bundestag. Diese werden nach Zeit, Parteien und Inhalt angezeigt.
-
-## Funktionalität
-
-<!-- Describe in detail which data manipulations (sort, filter,..) and visual
-manipulations (zoom, selection,...) you would want to implement and how these
-support the goals. -->
-
+Erstellen einer interaktiven Visualisierung der Ordnungsrufe im deutschen Bundestag. Dabei werden die Ordnungsrufe einer Partei aufeinandergestapelt (ähnlich wie ein stacked bar chart) dargestellt. Durch hovern über einen Ordnungsruf erhält man weitere Informationen. Es lassen sich  
 
 
 ## Data
@@ -124,6 +117,7 @@ Diese Liste beinhaltet alle Funktionen, die für gut befunden wurden aber keine 
 - [ ] Anzeigen der exakten Aussagen, für die ein Ordnungsruf erteilt wurde
 - [ ] Normalisieren des Datensatzes durch Darstellung der Anzahl der Sitze einer Partei
 - [ ] Vereinfachte Filteroptionen durch intelligentes ein- und ausblenden der relevanten Parteien
+- [ ] Kennzeichnen von historisch/politisch relevanten Ereignissen für Kontext
 
 ## Fazit und Ausblick
 
