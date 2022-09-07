@@ -11,7 +11,7 @@ files of your project). -->
 | Yannic Brügger | yannic.bruegger@smail.th-koeln.de  | 11125713 |
 | Jan Koll       | jan.koll@smail.th-koeln.de         | 11125790 |
 | Sven Linßen    | sven.linssen@th-koeln.de           | 11089166 |
-| Tim Loges      |                                    |          |
+| Tim Loges      | tim_philipp_tim.loges@smail.th-koeln.de | 11118655 |                                 |          |
 
 **Projekt Link** https://github.com/WasMachenSachen/vi-project
 
