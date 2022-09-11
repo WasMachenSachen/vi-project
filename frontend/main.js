@@ -47,7 +47,7 @@ timeline.onValueChange((selectedMonths) => {
       allPossibleParties,
       callsToOrder
     ),
-    chart.getSelectedParties
+    chart.getSelectedParties()
   );
   console.log(new Date(selectedMonths.from), new Date(selectedMonths.to));
 });

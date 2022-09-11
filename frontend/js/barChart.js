@@ -4,7 +4,6 @@ export class CTOEChart {
   constructor(width, height, margin, data, parties) {
     this.data = data;
     this.parties = parties;
-    console.log(Object.values(this.data));
     this.maxCount = d3.max(
       Object.values(this.data).map((el) => {
         return el.length;
@@ -15,24 +14,26 @@ export class CTOEChart {
     this.height = height;
     this.xAxis = d3
       .scaleBand()
-      .domain(this.parties)
+      .domain(this.selectedParties)
       .rangeRound([0, this.width])
-      .paddingOuter(0)
-      .paddingInner([0.15]);
+      .paddingOuter(0);
 
     this.svg = this.createSVG(this.width, this.height, margin);
     this.addFilterCheckboxes();
+    this.drawAxis();
     this.drawBars();
     this.update(this.data, this.selectedParties);
-    // this.addAxis();
   }
 
   update(data, parties) {
-    console.log({...this.selectedParties}, parties);
+    console.log({...this.selectedParties});
     this.data = data;
     this.selectedParties = parties;
+    console.log(this.selectedParties);
+    this.xAxis.domain(this.selectedParties);
     this.drawBars();
-    this.drawLabels();
+    this.drawAxis();
+    // this.drawLabels();
   }
 
   createSVG(width, height, margin) {
@@ -108,44 +109,57 @@ export class CTOEChart {
     const groups = this.svg.selectAll('g.party')
       .data(this.selectedParties);
 
-    groups.exit().remove();
-
-    groups.enter()
-      .append('g')
-      .attr('class', 'party')
-      .attr('transform', (d, i) => `translate(${i*context.xAxis.bandwidth()},0)`);
+    groups.join(
+      function(enter){
+        return enter.append('g')
+          .attr('class', 'party');
+      },
+      function(update){
+        return update.attr('transform', (d, i) => `translate(${i*context.xAxis.bandwidth()},0)`);
+      },
+      function(exit){
+        return exit.remove();
+      },
+    ) 
 
     const bars = groups.selectAll('rect')
       .data((d, i) => {return context.data[d]});
-    bars.exit().remove();
-    bars.enter()
-      .append('rect')
-      .attr("x", 0)
-      .attr("y", (d, i) => {
-        const sliceHeight = (context.height - 20) / context.maxCount;
-        return (context.height - sliceHeight * i) - 20;
-      })
-      .attr("width", context.xAxis.bandwidth())
-      .attr("height", ((context.height - 20) / context.maxCount) - 1)
-      .attr("class", "bar-slice")
-      .on("mousemove", function (event, d) {
-        const xPosition = event.x + context.xAxis.bandwidth() / 3;
-        const yPosition = parseFloat(d3.pointer(event, this)[1]);
-        //Update the tooltip position and value
-        d3.select("#tooltip")
-          .style("left", xPosition + "px")
-          .style("top", yPosition + "px")
-          .select("#name")
-          .text(d.calledOut.name);
-        d3.select("#tooltip").select("#party").text(d.calledOut.party);
-        //Show the tooltip
-        d3.select("#tooltip").classed("hidden", false);
-      })
-      .on("mouseout", function () {
-        //Hide the tooltip
-        /* TODO: check if mouse is over tooltip - dont hide it */
-        d3.select("#tooltip").classed("hidden", true);
-      });
+
+    const gap = 20;
+    bars.join(
+      function(enter){
+        return enter.append('rect')
+        .attr("x", gap / 2)
+        .attr("y", (d, i) => {
+          const sliceHeight = (context.height - 20) / context.maxCount;
+          return (context.height - sliceHeight * i) - 50;
+        })
+        .attr("width", context.xAxis.bandwidth() - gap)
+        .attr("height", ((context.height - 20) / context.maxCount) - 1)
+        .attr("class", "bar-slice")
+        .on("mousemove", function (event, d) {
+          const xPosition = event.x + context.xAxis.bandwidth() / 3;
+          const yPosition = parseFloat(d3.pointer(event, this)[1]);
+          //Update the tooltip position and value
+          d3.select("#tooltip")
+            .style("left", xPosition + "px")
+            .style("top", yPosition + "px")
+            .select("#name")
+            .text(d.calledOut.name);
+          d3.select("#tooltip").select("#party").text(d.calledOut.party);
+          //Show the tooltip
+          d3.select("#tooltip").classed("hidden", false);
+        })
+        .on("mouseout", function () {
+          //Hide the tooltip
+          /* TODO: check if mouse is over tooltip - dont hide it */
+          d3.select("#tooltip").classed("hidden", true);
+        });
+      },
+      function(update){ return update.attr("width", context.xAxis.bandwidth() - gap) },
+      function(exit){ return exit.remove() },
+    );
+      
     return;
 
     
@@ -230,15 +244,17 @@ export class CTOEChart {
       .attr("class", "bar-divider");
   }
 
-  addAxis() {
+  drawAxis() {
     // const xDomain = [...new Set(periods[0].parties.map((el) => el.name))];
+    this.svg.selectAll('g.axis').remove();
     this.svg
-      .append("g")
-      .attr("transform", `translate(0, ${this.height})`)
+      .append('g')
+      .attr('class', 'axis')
+      .attr("transform", `translate(0, ${this.height - 50})`)
       .call(d3.axisBottom(this.xAxis).tickSizeOuter(0))
       .call((g) => g.select(".domain").remove())
       .call((g) => g.selectAll("line").remove())
       .selectAll("text")
-      .style("font-size", "20px");
+      .style("font-size", "16px");
   }
 }
