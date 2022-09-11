@@ -35,6 +35,7 @@ const timelineSettings = {
   width: 1000,
   height: 100,
 }
+console.log(months);
 
 const timeline = new CTOERangeSlider(timelineSettings.width, timelineSettings.height, timelineMargin, callsToOrder, months);
 
@@ -48,4 +49,5 @@ timeline.onValueChange((selectedMonths) => {
     ),
     allPossibleParties
   );
+  console.log(new Date(selectedMonths.from), new Date(selectedMonths.to));
 });
