@@ -25,15 +25,18 @@ export class CTOERangeSlider {
   }
 
   prepareDataInMonthBatches(data, months) {
+    console.log(data, months);
     const res = {};
     months.forEach((month) => res[month.label] = 0);
+    console.log(res);
     data.forEach((call) => {
       if(months.map((month) => month.label).indexOf(call.date.slice(0, 7)) > -1) {
         res[call.date.slice(0, 7)] += 1;
       }
     });
     const filteredData = Object.values(res).filter((val) => val > 0);
-    const filteredKeys = Object.keys(res).filter((val, index) => filteredData[index] > 0)
+    const filteredKeys = Object.keys(res).filter((val, index) => res[val] > 0)
+    console.log(filteredKeys);
     return {
       filteredData: filteredData,
       filteredMonths: filteredKeys
