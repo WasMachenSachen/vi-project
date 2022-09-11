@@ -4,6 +4,11 @@ export class CTOEChart {
   constructor(width, height, margin, data, parties) {
     this.data = data;
     this.parties = parties;
+    this.maxCount = d3.max(
+      Object.values(this.data).map((el) => {
+        return el.length;
+      })
+    );
     this.selectedParties = [...this.parties];
     this.width = width;
     this.height = height;
@@ -17,7 +22,7 @@ export class CTOEChart {
     this.svg = this.createSVG(this.width, this.height, margin);
     this.addFilterCheckboxes();
     this.drawBars();
-    this.addAxis();
+    // this.addAxis();
   }
 
   update(data, parties) {
@@ -39,6 +44,7 @@ export class CTOEChart {
   }
 
   addFilterCheckboxes() {
+    const context = this;
     const partyContainers = d3.select('#checkbox-wrapper')
       .selectAll('div')
       .data(this.parties)
@@ -61,20 +67,76 @@ export class CTOEChart {
     .attr("id", (d, i) => `party-${i}`)
     .attr("name", (d, i) => `party-${i}`)
     .attr("type", "checkbox")
-    .attr("checked", "true");
+    .attr("checked", "true")
+    .attr('value', (d) => d)
+    .on('click', (e) => {
+      context.update(context.data, context.getSelectedParties());
+    });
     
     /* TODO: eventlistener and function to filter out selected party */
     /* TODO: select all partys eventlistener */
   }
 
+  getSelectedParties() {
+    const elements = document.querySelectorAll('input[type=checkbox]');
+    const selectedParties = [];
+    elements.forEach((element) => {
+      if(element.checked) selectedParties.push(element.value)
+    });
+   return selectedParties;
+  }
+  
   drawBars() {
     const context = this;
 
-    const maxCount = d3.max(
-      Object.values(this.data).map((el) => {
-        return el.length;
+    const groups = this.svg.selectAll('g')
+      .data(this.parties);
+
+    groups.exit().remove();
+
+    groups.enter()
+      .append('g')
+      .attr('transform', (d, i) => `translate(${i*context.xAxis.bandwidth()},0)`)
+      .append('text')
+      .text((d) => d)
+      .attr('x', 0)
+      .attr('y', context.height)
+      .attr('fill', 'black');
+
+    const bars = groups.selectAll('rect')
+      .data((d, i) => {return context.data[d]});
+    bars.exit().remove();
+    bars.enter()
+      .append('rect')
+      .attr("x", 0)
+      .attr("y", (d, i) => {
+        const sliceHeight = (context.height - 50) / context.maxCount;
+        return (context.height - sliceHeight * i) - 50;
       })
-    );
+      .attr("width", context.xAxis.bandwidth())
+      .attr("height", ((context.height - 50) / context.maxCount) - 1)
+      .attr("class", "bar-slice")
+      .on("mousemove", function (event, d) {
+        const xPosition = event.x + context.xAxis.bandwidth() / 3;
+        const yPosition = parseFloat(d3.pointer(event, this)[1]);
+        //Update the tooltip position and value
+        d3.select("#tooltip")
+          .style("left", xPosition + "px")
+          .style("top", yPosition + "px")
+          .select("#name")
+          .text(d.calledOut.name);
+        d3.select("#tooltip").select("#party").text(d.calledOut.party);
+        //Show the tooltip
+        d3.select("#tooltip").classed("hidden", false);
+      })
+      .on("mouseout", function () {
+        //Hide the tooltip
+        /* TODO: check if mouse is over tooltip - dont hide it */
+        d3.select("#tooltip").classed("hidden", true);
+      });
+    return;
+
+    
 
     // BARCHART
     const partyBar = this.svg
