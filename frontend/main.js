@@ -11,15 +11,15 @@ window.normalizeData = normalizeData;
 const allPossibleParties = getAllPartiesFromDataset(callsToOrder);
 
 /* CHART */
-const chartMargin = { top: 20, right: 10, bottom: 40, left: 10 };
+const chartMargin = { top: 0, right: 10, bottom: 0, left: 10 };
 const chartSettings = {
   width: 800,
-  height: 400,
+  height: 600,
 }
 
 const chartData = getCallsForPartiesInDateRange(
-  new Date('1980-01-01'),
-  new Date('1990-01-01'),
+  new Date('1949-01-01'),
+  new Date('2023-01-01'),
   allPossibleParties,
   callsToOrder
 );
@@ -47,7 +47,7 @@ timeline.onValueChange((selectedMonths) => {
       allPossibleParties,
       callsToOrder
     ),
-    allPossibleParties
+    chart.getSelectedParties
   );
   console.log(new Date(selectedMonths.from), new Date(selectedMonths.to));
 });

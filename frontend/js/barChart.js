@@ -4,6 +4,7 @@ export class CTOEChart {
   constructor(width, height, margin, data, parties) {
     this.data = data;
     this.parties = parties;
+    console.log(Object.values(this.data));
     this.maxCount = d3.max(
       Object.values(this.data).map((el) => {
         return el.length;
@@ -22,13 +23,16 @@ export class CTOEChart {
     this.svg = this.createSVG(this.width, this.height, margin);
     this.addFilterCheckboxes();
     this.drawBars();
+    this.update(this.data, this.selectedParties);
     // this.addAxis();
   }
 
   update(data, parties) {
+    console.log({...this.selectedParties}, parties);
     this.data = data;
-    this.parties = parties;
+    this.selectedParties = parties;
     this.drawBars();
+    this.drawLabels();
   }
 
   createSVG(width, height, margin) {
@@ -86,22 +90,30 @@ export class CTOEChart {
    return selectedParties;
   }
   
+  drawLabels() {
+    const context = this;
+    const labels = this.svg.selectAll('text')
+      .data(this.selectedParties);
+    labels.exit().remove();
+    labels.enter().append('text')
+    .text((d) => d)
+    .attr('x', (d, i) => i * context.xAxis.bandwidth())
+    .attr('y', context.height)
+    .attr('fill', 'black');
+  }
+
   drawBars() {
     const context = this;
 
-    const groups = this.svg.selectAll('g')
-      .data(this.parties);
+    const groups = this.svg.selectAll('g.party')
+      .data(this.selectedParties);
 
     groups.exit().remove();
 
     groups.enter()
       .append('g')
-      .attr('transform', (d, i) => `translate(${i*context.xAxis.bandwidth()},0)`)
-      .append('text')
-      .text((d) => d)
-      .attr('x', 0)
-      .attr('y', context.height)
-      .attr('fill', 'black');
+      .attr('class', 'party')
+      .attr('transform', (d, i) => `translate(${i*context.xAxis.bandwidth()},0)`);
 
     const bars = groups.selectAll('rect')
       .data((d, i) => {return context.data[d]});
@@ -110,11 +122,11 @@ export class CTOEChart {
       .append('rect')
       .attr("x", 0)
       .attr("y", (d, i) => {
-        const sliceHeight = (context.height - 50) / context.maxCount;
-        return (context.height - sliceHeight * i) - 50;
+        const sliceHeight = (context.height - 20) / context.maxCount;
+        return (context.height - sliceHeight * i) - 20;
       })
       .attr("width", context.xAxis.bandwidth())
-      .attr("height", ((context.height - 50) / context.maxCount) - 1)
+      .attr("height", ((context.height - 20) / context.maxCount) - 1)
       .attr("class", "bar-slice")
       .on("mousemove", function (event, d) {
         const xPosition = event.x + context.xAxis.bandwidth() / 3;
