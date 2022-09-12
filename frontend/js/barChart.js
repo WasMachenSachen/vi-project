@@ -77,9 +77,6 @@ export class CTOEChart {
     .on('click', (e) => {
       context.update(context.data, context.getSelectedParties());
     });
-    
-    /* TODO: eventlistener and function to filter out selected party */
-    /* TODO: select all partys eventlistener */
   }
 
   getSelectedParties() {
